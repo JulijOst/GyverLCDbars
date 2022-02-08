@@ -68,7 +68,7 @@ void initPlot() {
   lcd.createChar(7, row7);
 }
 
-void drawPlot(byte pos, byte row, byte width, byte height, int min_val, int max_val, int *plot_array) {
+void drawPlotArray(byte pos, byte row, byte width, byte height, int min_val, int max_val, int *plot_array) {
   for (byte i = 0; i < width; i++) {                  // каждый столбец параметров
     int fill_val = plot_array[i];
     fill_val = constrain(fill_val, min_val, max_val);
@@ -80,15 +80,15 @@ void drawPlot(byte pos, byte row, byte width, byte height, int min_val, int max_
 
     for (byte n = 0; n < height; n++) {     // для всех строк графика
       if (n < infill && infill > 0) {       // пока мы ниже уровня
-        lcd.setCursor(i, (row - n));        // заполняем полными ячейками
+        lcd.setCursor(i+pos, (row - n));        // заполняем полными ячейками
         lcd.write(0);
       }
       if (n >= infill) {                    // если достигли уровня
-        lcd.setCursor(i, (row - n));
+        lcd.setCursor(i+pos, (row - n));
         if (fract > 0) lcd.write(fract);          // заполняем дробные ячейки
         else lcd.write(16);                       // если дробные == 0, заливаем пустой
         for (byte k = n + 1; k < height; k++) {   // всё что сверху заливаем пустыми
-          lcd.setCursor(i, (row - k));
+          lcd.setCursor(i+pos, (row - k));
           lcd.write(16);
         }
         break;
